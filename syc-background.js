@@ -43,8 +43,6 @@ sendMessageToContent({ sync: true })
 
 // messages from content and popup
 chrome.runtime.onMessage.addListener(msg => {
-  console.log(msg)
-
   /* content messages */
   if (msg.commentsScrollIsEnabled === true) {
     commentsScrollIsEnabled = true

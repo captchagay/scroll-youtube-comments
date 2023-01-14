@@ -28,6 +28,12 @@ function enableCommentsScroll(bool) {
 
 const sendMessageToBackground = (msgObj) => chrome.runtime.sendMessage(msgObj)
 
+function onMessage(msg) {
+  if (msg.sync) sendMessageToBackground({ stop, commentsScrollIsEnabled })
+  if ([true, false].includes(msg.enableCommentsScroll))
+    enableCommentsScroll(msg.enableCommentsScroll)
+}
+
 function action() {
   if (availablePages.includes(location.pathname))
     stop = false
@@ -39,11 +45,9 @@ function action() {
 
   sendMessageToBackground({ stop, commentsScrollIsEnabled })
 
-  chrome.runtime.onMessage.addListener(msg => {
-    if (msg.sync) sendMessageToBackground({ stop, commentsScrollIsEnabled })
-    if ([true, false].includes(msg.enableCommentsScroll))
-      enableCommentsScroll(msg.enableCommentsScroll)
-  })
+  // remove previously assigned event to avoid dublicate
+  chrome.runtime.onMessage.removeListener(onMessage)
+  chrome.runtime.onMessage.addListener(onMessage)
 }
 
 document.addEventListener("yt-page-type-changed", action)
