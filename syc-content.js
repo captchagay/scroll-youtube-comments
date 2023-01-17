@@ -12,7 +12,7 @@ function enableCommentsScroll(bool) {
   if (bool) {
     const commentsWrapper = document.createElement("div")
     commentsWrapper.id = commentsWrapperId
-    commentsWrapper.style = "height: 90vh; margin-bottom: 16px; overflow-y: scroll;"
+    commentsWrapper.classList.add("sycCommentsWrapper")
     commentsWrapper.appendChild(comments)
 
     secondaryInner.prepend(commentsWrapper)
